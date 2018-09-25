@@ -67,12 +67,12 @@ public class WaveView extends TextView {
         init();
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DiffuseView, defStyleAttr, 0);
-        mColor = a.getColor(R.styleable.DiffuseView_diffuse_color, mColor);
-        mCoreColor = a.getColor(R.styleable.DiffuseView_diffuse_coreColor, mCoreColor);
-        mCoreRadius = a.getFloat(R.styleable.DiffuseView_diffuse_coreRadius, mCoreRadius);
-        mDiffuseWidth = a.getInt(R.styleable.DiffuseView_diffuse_width, mDiffuseWidth);
-        mMaxWidth = a.getInt(R.styleable.DiffuseView_diffuse_maxWidth, mMaxWidth);
-        int imageId = a.getResourceId(R.styleable.DiffuseView_diffuse_coreImage, -1);
+        mColor = a.getColor(R.styleable.DiffuseView_wave_color, mColor);
+        mCoreColor = a.getColor(R.styleable.DiffuseView_wave_coreColor, mCoreColor);
+        mCoreRadius = a.getFloat(R.styleable.DiffuseView_wave_coreRadius, mCoreRadius);
+        mDiffuseWidth = a.getInt(R.styleable.DiffuseView_wave_width, mDiffuseWidth);
+        mMaxWidth = a.getInt(R.styleable.DiffuseView_wave_maxWidth, mMaxWidth);
+        int imageId = a.getResourceId(R.styleable.DiffuseView_wave_coreImage, -1);
         if (imageId != -1) mBitmap = BitmapFactory.decodeResource(getResources(), imageId);
         a.recycle();
     }
