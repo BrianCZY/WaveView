@@ -16,7 +16,7 @@
     <!--扩散速度，值越大越快-->
     <attr name="wave_speed" format="integer"/>
 
-    <declare-styleable name="DiffuseView">
+    <declare-styleable name="WaveView">
         <attr name="wave_color"/>
         <attr name="wave_coreColor"/>
         <attr name="wave_coreImage"/>

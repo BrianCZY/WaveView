@@ -38,15 +38,21 @@ public class WaveView extends TextView {
     /**
      * 扩散圆宽度
      */
-    private int mDiffuseWidth = 3;
+    private int mWaveWidth = 3;
     /**
      * 最大宽度
      */
     private Integer mMaxWidth = 255;
+
+    /**
+     * 最大宽度
+     */
+    private Integer mSpeed =1;
+
     /**
      * 是否正在扩散中
      */
-    private boolean mIsDiffuse = false;
+    private boolean mIsWave = false;
     // 透明度集合
     private List<Integer> mAlphas = new ArrayList<>();
     // 扩散圆半径集合
@@ -66,13 +72,14 @@ public class WaveView extends TextView {
         this.context = context;
         init();
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DiffuseView, defStyleAttr, 0);
-        mColor = a.getColor(R.styleable.DiffuseView_wave_color, mColor);
-        mCoreColor = a.getColor(R.styleable.DiffuseView_wave_coreColor, mCoreColor);
-        mCoreRadius = a.getFloat(R.styleable.DiffuseView_wave_coreRadius, mCoreRadius);
-        mDiffuseWidth = a.getInt(R.styleable.DiffuseView_wave_width, mDiffuseWidth);
-        mMaxWidth = a.getInt(R.styleable.DiffuseView_wave_maxWidth, mMaxWidth);
-        int imageId = a.getResourceId(R.styleable.DiffuseView_wave_coreImage, -1);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WaveView, defStyleAttr, 0);
+        mColor = a.getColor(R.styleable.WaveView_wave_color, mColor);
+        mCoreColor = a.getColor(R.styleable.WaveView_wave_coreColor, mCoreColor);
+        mCoreRadius = a.getFloat(R.styleable.WaveView_wave_coreRadius, mCoreRadius);
+        mWaveWidth = a.getInt(R.styleable.WaveView_wave_width, mWaveWidth);
+        mMaxWidth = a.getInt(R.styleable.WaveView_wave_maxWidth, mMaxWidth);
+        mSpeed = a.getInt(R.styleable.WaveView_wave_speed, mMaxWidth);
+        int imageId = a.getResourceId(R.styleable.WaveView_wave_coreImage, -1);
         if (imageId != -1) mBitmap = BitmapFactory.decodeResource(getResources(), imageId);
         a.recycle();
     }
@@ -104,17 +111,19 @@ public class WaveView extends TextView {
             canvas.drawCircle(getWidth() / 2, getHeight() / 2, mCoreRadius + width, mPaint);
 
             if (alpha > 0 && width < mMaxWidth) {
-                mAlphas.set(i, alpha - 1);
-                mWidths.set(i, width + 1);
+
+                mAlphas.set(i, alpha - mSpeed -1); //设置透明度，mSpeed-1 :颜色渐变的速度
+                mWidths.set(i, width + mSpeed);  //设置圆的半径，mSpeed ：为扩散的速度
             }
         }
         // 判断当扩散圆扩散到指定宽度时添加新扩散圆
-        if (mWidths.get(mWidths.size() - 1) == mMaxWidth / mDiffuseWidth) {
+        if (mWidths.get(mWidths.size() - 1) >= mMaxWidth / mWaveWidth) {
             mAlphas.add(255);
             mWidths.add(0);
+
         }
         // 超过10个扩散圆，删除最外层
-        if (mWidths.size() >= 5) {
+        if (mWidths.size() >= mWaveWidth+1) {
             mWidths.remove(0);
             mAlphas.remove(0);
         }
@@ -132,7 +141,7 @@ public class WaveView extends TextView {
         mPaint.setColor(000);
 //        canvas.drawText("领取任务",getWidth() / 2, getHeight() / 2,mPaint);
 
-
+//绘制text
 //// 方法1
         String string = getText().toString();
         Paint mPaint = new Paint();
@@ -166,7 +175,7 @@ public class WaveView extends TextView {
 //        canvas.translate(getMeasuredWidth() / 2 - bounds.width() / 2,baseline);//从100，100开始画
 //        layout.draw(canvas);
 //        canvas.restore();//别忘了restore
-        if (mIsDiffuse) {
+        if (mIsWave) {
             invalidate();
         }
     }
@@ -175,7 +184,7 @@ public class WaveView extends TextView {
      * 开始扩散
      */
     public void start() {
-        mIsDiffuse = true;
+        mIsWave = true;
         invalidate();
     }
 
@@ -183,7 +192,7 @@ public class WaveView extends TextView {
      * 停止扩散
      */
     public void stop() {
-        mIsDiffuse = false;
+        mIsWave = false;
         mAlphas.clear();
         mWidths.clear();
         init();
@@ -194,14 +203,14 @@ public class WaveView extends TextView {
      * 暂停
      */
     public void pause() {
-        mIsDiffuse = false;
+        mIsWave = false;
     }
 
     /**
      * 是否扩散中
      */
-    public boolean isDiffuse() {
-        return mIsDiffuse;
+    public boolean isWave() {
+        return mIsWave;
     }
 
     /**
@@ -235,8 +244,8 @@ public class WaveView extends TextView {
     /**
      * 设置扩散圆宽度(值越小宽度越大)
      */
-    public void setDiffuseWidth(int width) {
-        mDiffuseWidth = width;
+    public void setWaveWidth(int width) {
+        mWaveWidth = width;
     }
 
     /**

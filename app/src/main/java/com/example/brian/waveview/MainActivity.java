@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (wave_view.isDiffuse()){
+                if (wave_view.isWave()){
                     wave_view.stop();
                 }else {
                     wave_view.start();
